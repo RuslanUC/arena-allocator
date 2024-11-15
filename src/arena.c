@@ -114,12 +114,15 @@ int arena_delete(struct arena *a)
     if (!(a->flags & ARENA_GROW)) {
         return -1;
     }
+    bool reset_cap_and_size = ((size_t)a < (size_t)a->data) || ((size_t)a >= (size_t)a->data + a->cap);
     int ok = munmap(a->data, KNOB_MMAP_SIZE);
     if (ok == -1) {
-        arena_err("munmap");
+        //arena_err("munmap");
         return -1;
     }
-    a->cap  = -1;
-    a->size = -1;
+    if(reset_cap_and_size) {
+        a->cap  = -1;
+        a->size = -1;
+    }
     return 0;
 }
