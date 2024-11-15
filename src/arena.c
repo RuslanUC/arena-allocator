@@ -93,7 +93,7 @@ void* arena_alloc(arena_t *a, size_t size)
 
     void *p = a->data + a->size;
     if (a->size + size > a->cap) {
-        if (!arena_grow(a, a->size))
+        if (!arena_grow(a, a->size + size))
             return NULL;
     }
     a->size += size;
